@@ -5,17 +5,20 @@ import localmodel
 from DataTransformer import data
 from torch.utils.tensorboard import SummaryWriter
 import os
-
-data_train_loader, data_test_loader = data()
-writer = SummaryWriter(os.getcwd() + '\\log1')
 batch_size = 100
+
+data_train_loader, data_test_loader = data(batch_size)
+
+train_size = len(data_train_loader.dataset)
+test_size = len(data_test_loader.dataset)
+writer = SummaryWriter(os.getcwd() + '\\log1')
+
 n_iters = 10000
-# num_epochs = n_iters / (len(features_train) / batch_size)
-# num_epochs = int(num_epochs)
-num_epochs = 5
-lr = 0.03
+num_epochs = n_iters / (train_size / batch_size)
+num_epochs = int(num_epochs)
+lr = 0.003
 print_step = 10
-model = localmodel.CNNModel()
+model = localmodel.Net()
 model.train()
 criterion = nn.CrossEntropyLoss()  # 损失函数
 optimizer = optim.Adam(model.parameters(), lr=lr)
@@ -48,18 +51,18 @@ def train(epoch):
                 'Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                     epoch,
                     batch_idx * len(inputs),
-                    len(train_data),
+                    train_size,
                     100. * batch_idx / len(data_train_loader),
                     loss.item()))
             print(batch_idx,
-                  len(train_data),
+                  train_size,
                   'Acc: {0:4f}%({1}/{2})'.format(100. * correct / total,
                                                  correct,
                                                  total))
     writer.add_scalar('acc_train', train_acc, epoch)
 
 
-def test():
+def test(epoch):
     test_loss = 0
     correct = 0
     total = 0
@@ -72,12 +75,12 @@ def test():
             correct += pred.eq(target.data.view_as(pred)).sum()
             total += target.size(0)  # 数据类型int
             test_acc = torch.true_divide(correct, total)
-    test_loss /= len(test_data)
-    test_losses.append(test_loss)
+    test_loss /= test_size
     print('\nTest set: Avg. loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, total, 100. * correct / total))
     writer.add_scalar('acc_test', test_acc, epoch)
 
-# for epoch in range(1, num_epochs + 1):
-#     train(epoch)
-#     test()
+
+for epoch in range(1, num_epochs + 1):
+    train(epoch)
+    test(epoch)

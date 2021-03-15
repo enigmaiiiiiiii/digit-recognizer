@@ -23,8 +23,7 @@ def data(batch_size):
     tensor_test_targets = torch.from_numpy(targets_test).type(torch.LongTensor)
     predict_tensor = torch.from_numpy(test_data.values / 255).view(-1, 1, 28, 28)
 
-    """将numpy类型转换为tenso
-    r"""
+    """将numpy类型转换为tensor"""
     # Pytorch train and test sets
 
     train = torch.utils.data.TensorDataset(tensor_train_features, tensor_train_targets)

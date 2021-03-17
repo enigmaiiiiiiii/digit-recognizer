@@ -121,8 +121,8 @@ def test():
             output = model(data)
             """data的size（N，C，H，W），output的size（N，最后一层的维度）"""
             test_loss += criterion(output, target).item()
-            pred = output.data.max(1, keepdim=True)[1]     #预测值的index
-            correct += pred.eq(target.data.view_as(pred)).sum()
+            pred = output.Train_Test_Data.max(1, keepdim=True)[1]     #预测值的index
+            correct += pred.eq(target.Train_Test_Data.view_as(pred)).sum()
             total += target.size(0)
     test_loss /= len(test_data)
     test_losses.append(test_loss)
@@ -139,7 +139,7 @@ if __name__ == '__main__':
 testTensor = torch.from_numpy(test_data.values / 255).view(-1, 1, 28, 28)
 random_index = np.random.randint(0, len(test_data), 16)
 predict = model(testTensor[random_index])
-predict_result = predict.data.max(1)[1].numpy()
+predict_result = predict.Train_Test_Data.max(1)[1].numpy()
 
 fig, axes = plt.subplots(4, 4, figsize=(8, 8),
                          subplot_kw={'xticks': [], 'yticks': []},

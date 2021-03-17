@@ -2,12 +2,12 @@ import torch
 from torch import nn
 from torch import optim
 import localmodel
-from DataTransformer import data
+from DataTransformer import Train_Test_Data
 from torch.utils.tensorboard import SummaryWriter
 import os
 batch_size = 100
 
-data_train_loader, data_test_loader = data(batch_size)
+data_train_loader, data_test_loader = Train_Test_Data(batch_size)
 
 train_size = len(data_train_loader.dataset)
 test_size = len(data_test_loader.dataset)
@@ -71,8 +71,8 @@ def test(epoch):
             output = model(data)
             """data的size（N，C，H，W），output的size（N，最后一层的维度）"""
             test_loss += criterion(output, target).item()
-            pred = output.data.max(1, keepdim=True)[1]
-            correct += pred.eq(target.data.view_as(pred)).sum()
+            pred = output.Train_Test_Data.max(1, keepdim=True)[1]
+            correct += pred.eq(target.Train_Test_Data.view_as(pred)).sum()
             total += target.size(0)  # 数据类型int
             test_acc = torch.true_divide(correct, total)
     test_loss /= test_size
@@ -84,3 +84,7 @@ def test(epoch):
 for epoch in range(1, num_epochs + 1):
     train(epoch)
     test(epoch)
+
+if os.path.isdir(model):
+    os.makedirs('.\\TrainedModels')
+torch.save(model,'.\\TrainedModels\\Net.pth')

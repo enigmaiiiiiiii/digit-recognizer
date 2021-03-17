@@ -235,8 +235,8 @@ def test():
             output = model(data)
             """data的size（N，C，H，W），output的size（N，最后一层的维度）"""
             test_loss += criterion(output, target).item()
-            pred = output.data.max(1, keepdim=True)[1]
-            correct += pred.eq(target.data.view_as(pred)).sum()
+            pred = output.Train_Test_Data.max(1, keepdim=True)[1]
+            correct += pred.eq(target.Train_Test_Data.view_as(pred)).sum()
             total += target.size(0)  # 数据类型int
             test_acc = torch.true_divide(correct, total)
     test_loss /= len(test_data)

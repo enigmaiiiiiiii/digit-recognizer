@@ -7,12 +7,15 @@ from torch.utils.tensorboard import SummaryWriter
 import os
 
 batch_size = 100
-train_data_path =
+train_data_path = r'D:/JupyterProject/digit-recognizer/train.csv'
+test_data_path = r'D:/JupyterProject/digit-recognizer/test.csv'
+digit_data = data_factory(train_data_path, test_data_path)
 
-data_train_loader = data_factory.train_test_dataloader(batch_size)
+data_train_loader, data_test_loader= digit_data.train_test_dataloader(batch_size)
 
 train_size = len(data_train_loader.dataset)
-# test_size = len(data_test_loader.dataset)
+if data_test_loader is not None:
+    test_size = len(data_test_loader.dataset)
 writer = SummaryWriter(os.getcwd() + '\\log1')
 
 n_iters = 10000
@@ -87,7 +90,7 @@ for epoch in range(1, num_epochs + 1):
     train(epoch)
     # test(epoch)
 
-if os.path.isdir('.\\TrainedModels'):
+if os.path.isdir('.\\TrainedModels') is False:
     os.makedirs('.\\TrainedModels')
 torch.save(model, '.\\TrainedModels\\TrainWithAllData.pth')
 

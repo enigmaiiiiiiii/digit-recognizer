@@ -14,20 +14,21 @@ class data_factory:
         self.train_data = pd.read_csv(self.train_data_path).astype('float32')
         self.test_data = pd.read_csv(self.predict_data_path).astype('float32')
 
-    def train_test_dataloader(self, batch_size,test_size=False):
+    def train_test_dataloader(self, batch_size, test_size=False):
         """为了训练和测试，创建pytorh模型用的DataLoader"""
 
         targets_numpy = self.train_data.label.values
         features_numpy = self.train_data.drop(columns='label').values / 255
 
         if not test_size:
-            tensor_train_features = torch.from_numpy(features_numpy.view(-1, 1, 28, 28))
+            tensor_train_features = torch.from_numpy(features_numpy).view(-1, 1, 28, 28)
             tensor_train_targets = torch.from_numpy(targets_numpy).type(torch.LongTensor)
 
             train = TensorDataset(tensor_train_features, tensor_train_targets)
             data_train_loader = DataLoader(train, batch_size=batch_size, shuffle=False)
+            data_test_loader = None
 
-            return data_train_loader
+
 
         else:
             features_train, features_test, targets_train, targets_test = train_test_split(
@@ -48,7 +49,7 @@ class data_factory:
             data_train_loader = DataLoader(train, batch_size=batch_size, shuffle=False)
             data_test_loader = DataLoader(test, batch_size=batch_size, shuffle=False)
 
-            return data_train_loader, data_test_loader
+        return data_train_loader, data_test_loader
 
     def predict_dataloader(self, batch_size):
         """为了预测结果，创建pytorh模型用的DataLoader"""
@@ -58,4 +59,6 @@ class data_factory:
         predict_loader = DataLoader(predict_dataset, batch_size=batch_size, shuffle=False)
 
         return predict_loader
+
+
 

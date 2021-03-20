@@ -1,10 +1,14 @@
-from DataTransformer import predict_data
+from DataTransformer import data_factory
 import torch
 import pandas as pd
 
-predict_loader = predict_data(batch_size=50)
+train_data_path = r'D:/JupyterProject/digit-recognizer/train.csv'
+test_data_path = r'D:/JupyterProject/digit-recognizer/test.csv'
+digit_data = data_factory(train_data_path,test_data_path)
 
-model = torch.load('Net.pth')
+predict_loader = digit_data.predict_dataloader(batch_size=100)
+
+model = torch.load('.\\TrainedModels\\TrainWithAllData.pth')
 model.eval()
 
 submission_tensor = torch.LongTensor()

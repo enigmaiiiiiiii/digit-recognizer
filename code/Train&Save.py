@@ -2,15 +2,17 @@ import torch
 from torch import nn
 from torch import optim
 import localmodel
-from DataTransformer import Train_Test_Data
+from DataTransformer import data_factory
 from torch.utils.tensorboard import SummaryWriter
 import os
-batch_size = 100
 
-data_train_loader, data_test_loader = Train_Test_Data(batch_size)
+batch_size = 100
+train_data_path =
+
+data_train_loader = data_factory.train_test_dataloader(batch_size)
 
 train_size = len(data_train_loader.dataset)
-test_size = len(data_test_loader.dataset)
+# test_size = len(data_test_loader.dataset)
 writer = SummaryWriter(os.getcwd() + '\\log1')
 
 n_iters = 10000
@@ -83,8 +85,19 @@ def test(epoch):
 
 for epoch in range(1, num_epochs + 1):
     train(epoch)
-    test(epoch)
+    # test(epoch)
 
-if os.path.isdir(model):
+if os.path.isdir('.\\TrainedModels'):
     os.makedirs('.\\TrainedModels')
-torch.save(model,'.\\TrainedModels\\Net.pth')
+torch.save(model, '.\\TrainedModels\\TrainWithAllData.pth')
+
+
+
+
+
+
+
+
+
+
+

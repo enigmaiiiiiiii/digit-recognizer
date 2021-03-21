@@ -70,8 +70,8 @@ Y_pred = model(X_val)
 
 
 
-errors = (Y_pred_classes - Y_true != 0)           #errors_index
-Y_pred_classes_errors = Y_pred_classes[errors]    #错误预测的预测结果
+errors = (Y_pred_classes - Y_true != 0)           # errors_index
+Y_pred_classes_errors = Y_pred_classes[errors]    # 错误预测的预测结果
 Y_pred_errors = Y_pred[errors]
 Y_true_errors = Y_true[errors]
 X_val_errors = X_val[errors]

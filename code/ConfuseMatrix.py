@@ -56,7 +56,12 @@ def display_errors(errors_index,img_errors,pred_errors, obs_errors):
             ax[row, col].set_title("Predicted label :{}\nTrue label :{}".format(pred_errors[error],obs_errors[error]))
             n += 1
 
-digit_data = data_factory(train_data_path,test_data_path)
+digit_data = data_factory(train_data_path, test_data_path)
+train_data = digit_data.train_data
+X = digit_data.train_data.drop(columns='label').values / 255
+X = torch.from_numpy(X).view(-1, 1, 28, 28)
+y = digit_data.train_data.label.values
+y = torch.from_numpy(y).type(torch.LongTenso
 
 y_train = digit_data.train_data.label.values
 y_train = to_categorical(y_train,10)
@@ -65,13 +70,15 @@ X_train = digit_data.train_data.drop(columns='label').values / 255
 
 X_train, X_val, Y_train, Y_val = train_test_split(X_train, y_train, test_size = 0.1, random_state=42)
 model = torch.load("Net.pth")
+with torch.no_grad():
+    y = model(X_test)
 
 Y_pred = model(X_val)
 
 
 
-errors = (Y_pred_classes - Y_true != 0)           # errors_index
-Y_pred_classes_errors = Y_pred_classes[errors]    # 错误预测的预测结果
+errors = (Y_pred_classes - Y_true != 0)           #errors_index
+Y_pred_classes_errors = Y_pred_classes[errors]    #错误预测的预测结果
 Y_pred_errors = Y_pred[errors]
 Y_true_errors = Y_true[errors]
 X_val_errors = X_val[errors]

@@ -7,8 +7,8 @@ from torch.utils.tensorboard import SummaryWriter
 import os
 
 batch_size = 100
-train_data_path = r'D:/JupyterProject/digit-recognizer/train.csv'
-test_data_path = r'D:/JupyterProject/digit-recognizer/test.csv'
+train_data_path = r'./digit-recognizer/train.csv'
+test_data_path = r'./digit-recognizer/test.csv'
 digit_data = data_factory(train_data_path, test_data_path)
 
 data_train_loader, data_test_loader= digit_data.train_test_dataloader(batch_size)
@@ -44,6 +44,8 @@ def train(epoch):
         loss = criterion(outputs, targets)  # 有target才有loss
         loss.backward()  # 损失反向传播
         optimizer.step()
+        """分割线，以上为模型完成了一次循环，
+        以下为训练信息输出"""
         _, predicted = outputs.max(1)
         """outputs.max(1)返回index,value"""
         total += targets.size(0)
